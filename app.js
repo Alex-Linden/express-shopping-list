@@ -1,102 +1,17 @@
-/** Simple demo Express app. */
+"use strict";
 
 const express = require("express");
 const app = express();
 
-// useful error class to throw
+const router = require("./itemRoutes")
+
 const { NotFoundError } = require("./expressError");
 
-// process JSON body => req.body
 app.use(express.json());
-
-// process traditional form data => req.body
 app.use(express.urlencoded({ extended: true }));
 
-/** Homepage renders simple message. */
 
-app.get("/", function (req, res) {
-  return res.send("Hello World!");
-});
-// end home
-
-const USERS = [];
-
-/** Show info on instructor. */
-
-app.get("/staff/:fname", function (req, res) {
-  return res.send(`This instructor is ${req.params.fname}`);
-});
-
-/** Show JSON on instructor */
-
-app.get("/api/staff/:fname", function (req, res) {
-  return res.json({ fname: req.params.fname });
-});
-// end json
-
-/** Add a new instructor. */
-
-app.post("/api/staff", function (req, res) {
-  // ... Do some database operation here...
-  // ... then return something as JSON ...
-  return res.json({
-    fname: req.body.fname,
-  });
-});
-// end post
-
-/** Sample of returning status code */
-
-app.get("/whoops", function (req, res) {
-  return res
-    .status(404)
-    .json({ oops: "Nothing here!" });
-});
-
-/** Sample of validating / error handling */
-
-app.get("/users/:id", function (req, res) {
-  const user = USERS.find(u =>
-      u.id === req.params.id
-  );
-
-  if (!user) {
-    return res.status(404).json({ err: "No such user"});
-  }
-
-  return res.send({ user });
-});
-// end
-
-/** Throwing Error */
-
-app.get("/users2/:id", function (req, res) {
-  const user = USERS.find(u =>
-      u.id === req.params.id
-  );
-
-  if (!user) {
-    throw new Error("No such user");
-  }
-
-  return res.send({ user });
-});
-// end
-
-/** Throwing NotFoundError */
-
-app.get("/users3/:id", function (req, res) {
-  const user = USERS.find(u =>
-      u.id === req.params.id
-  );
-
-  if (!user) {
-    throw new NotFoundError("No such user");
-  }
-
-  return res.send({ user });
-});
-// end
+app.use("/items", userRoutes);
 
 
 /** 404 handler: matches unmatched routes. */
