@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-app.use("/items", userRoutes);
+app.use("/items", router);
 
 
 /** 404 handler: matches unmatched routes. */

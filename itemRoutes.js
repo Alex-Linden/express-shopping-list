@@ -7,11 +7,12 @@ const itemsDb = require("./fakeDb");
 const router = new express.Router()
 
 /** Return a list of shopping items */
-app.get("/items", function (req, res) {
+router.get("/items", function (req, res) {
   return res.json({ "items": itemsDb });
 });
 
-app.post("/items:", function (req, res) {
+/**accepts JSON, Add new item to items data base return item added */
+router.post("/items:", function (req, res) {
   const newItem = req.json;
   itemsDb.push(newItem);
   return res.json({
@@ -19,7 +20,8 @@ app.post("/items:", function (req, res) {
   });
 });
 
-app.get("/:name", function (req, res) {
+/**accepts request param, returns single item: */
+router.get("/:name", function (req, res) {
   let responseItem = '';
   for (let i = 0; i < itemsDb.length; i++) {
     if (itemsDb[i]["name"] === req.params.name) {
@@ -34,7 +36,8 @@ app.get("/:name", function (req, res) {
 
 });
 
-app.patch("/:name", function (req, res) {
+/** accept JSON body, finds item in db, modify item, return it */
+router.patch("/:name", function (req, res) {
   let itemToUpdate = '';
   for (let i = 0; i < itemsDb.length; i++) {
     if (itemsDb[i]["name"] === req.params.name) {
@@ -48,7 +51,8 @@ app.patch("/:name", function (req, res) {
   return res.json({ itemToUpdate });
 });
 
-app.delete("/:name", function(req, res) {
+/** accepts request param, finds item in db, deletes it, returns deleted message*/
+router.delete("/:name", function(req, res) {
   for (let i = 0; i < itemsDb.length; i++) {
     if (itemsDb[i]["name"] === req.params.name) {
       itemsDb.splice(i, 1);
